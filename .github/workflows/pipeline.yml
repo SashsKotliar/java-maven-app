@@ -13,7 +13,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/chekout@v4 #git clone - download repo-code onto runner machine
+        uses: actions/checkout@v4 #git clone - download repo-code onto runner machine
 
       - name: Install JDK
         uses: actions/setup-java@v4
