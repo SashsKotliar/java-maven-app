@@ -79,10 +79,4 @@ jobs:
             --instance-ids "i-053d4355a206edced" \
             --document-name "AWS-RunShellScript" \
             --comment "Deploy java app container" \
-            --parameters \
-              commands="docker pull sashak9/sasha-maven:latest" \
-              commands="docker stop java-deploy || true" \
-              commands="docker rm java-deploy || true" \
-              commands="docker image prune -f" \
-              commands="docker run --name java-deploy sashak9/sasha-maven:latest"
-
+            --parameters '{"commands":["docker pull '${{ secrets.DOCKERHUB_USERNAME }}'/sasha-maven:latest","docker stop java-deploy || true","docker rm java-deploy || true","docker image prune -f","docker run --name java-deploy '${{ secrets.DOCKERHUB_USERNAME }}'/sasha-maven:latest"]}'
