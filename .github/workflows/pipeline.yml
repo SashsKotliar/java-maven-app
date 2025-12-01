@@ -65,3 +65,23 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git commit -a -m "Patch version increased to $NEW_VERSION"
           git push
+
+      - name: Configure AWS credentials      
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          role-to-assume: arn:aws:iam::495930421236:role/GithubActionsDeploy
+          aws-region: eu-north-1
+
+      - name: Deploy container to EC2 via SSM
+        run: |
+          aws ssm send-command \
+            --instance-ids "i-053d4355a206edced" \
+            --document-name "AWS-RunShellScript" \
+            --comment "Deploy java app container" \
+            --parameters \
+              commands="docker pull sashak9/sasha-maven:latest" \
+              commands="docker stop java-deploy || true" \
+              commands="docker rm java-deploy || true" \
+              commands="docker image prune -f" \
+              commands="docker run --name java-deploy sashak9/sasha-maven:latest"
+
